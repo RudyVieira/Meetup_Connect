@@ -1,6 +1,11 @@
 // HomePage.js - Page d'accueil principale
+import createElement from "../lib/createElement.js";
+import generateStructure from "../lib/generateStructure.js";
+import Layout from "../components/Layout.js";
+
 function HomePage() {
-  return {
+  // Structure de la homepage avec le système de composants existant
+  const homePageContent = generateStructure({
     tag: "div",
     attributes: [["class", "min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50"]],
     children: [
@@ -39,7 +44,7 @@ function HomePage() {
                       {
                         tag: "a",
                         attributes: [
-                          ["href", "#events"],
+                          ["href", "/evenements"],
                           ["class", "bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"]
                         ],
                         children: ["🎯 Découvrir les événements"]
@@ -47,7 +52,7 @@ function HomePage() {
                       {
                         tag: "a",
                         attributes: [
-                          ["href", "#communities"],
+                          ["href", "/communautes"],
                           ["class", "border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"]
                         ],
                         children: ["👥 Rejoindre une communauté"]
@@ -304,7 +309,13 @@ function HomePage() {
         ]
       }
     ]
-  };
+  });
+
+  // Retourner la page dans le Layout comme les autres pages
+  return Layout({
+    title: "Accueil - Meetup Connect",
+    content: homePageContent
+  });
 }
 
 // Export par défaut pour éviter l'erreur de module
