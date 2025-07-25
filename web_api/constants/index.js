@@ -1,12 +1,13 @@
 
 // Constantes globales de l'application
+import { ENV_CONFIG } from '../config/environment.js';
 
 // Configuration de l'application
 export const APP_CONFIG = {
   name: 'Meetup Connect',
   version: '2.0.0',
   description: 'Plateforme communautaire pour créer et rejoindre des événements',
-  baseUrl: '/web_api'
+  baseUrl: ENV_CONFIG.getBaseUrl()
 };
 
 // Messages d'erreur standardisés

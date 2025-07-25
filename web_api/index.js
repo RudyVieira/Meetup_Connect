@@ -1,6 +1,7 @@
 import BrowserRouter from "./components/BrowserRouter.js";
 import routes from "./routes/index.js";
 import { preloadCriticalResources, optimizeScroll, getOptimizedConfig } from "./config/performance.js";
+import { APP_CONFIG } from "./constants/index.js";
 
 // Initialiser les optimisations de performance
 const config = getOptimizedConfig();
@@ -16,5 +17,5 @@ optimizeScroll();
 BrowserRouter({
   routes,
   rootElement: document.getElementById("root"),
-  baseUrl: "/web_api",
+  baseUrl: APP_CONFIG.baseUrl,
 });
