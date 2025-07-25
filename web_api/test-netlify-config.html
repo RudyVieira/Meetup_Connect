@@ -84,8 +84,8 @@
 
     <script type="module">
         import { ENV_CONFIG } from './config/environment.js';
-        import URLUtils from './utils/URLUtils.js';
-        import { APP_CONFIG } from './constants/index.js';
+        import { buildUrl, navigate } from './utils/URLHelpers.js';
+        import { getBaseUrl, isProduction } from './config/base.js';
 
         // Afficher les informations d'environnement
         function displayEnvInfo() {
@@ -94,9 +94,8 @@
             
             envInfo.innerHTML = `
                 <p><strong>Hostname actuel:</strong> <code>${window.location.hostname}</code></p>
-                <p><strong>Est Netlify:</strong> <span class="${ENV_CONFIG.isNetlify() ? 'success' : 'error'}">${ENV_CONFIG.isNetlify()}</span></p>
-                <p><strong>Est Local:</strong> <span class="${ENV_CONFIG.isLocal() ? 'success' : 'error'}">${ENV_CONFIG.isLocal()}</span></p>
-                <p><strong>Base URL configurée:</strong> <code>"${APP_CONFIG.baseUrl}"</code></p>
+                <p><strong>Est Production:</strong> <span class="${isProduction() ? 'success' : 'error'}">${isProduction()}</span></p>
+                <p><strong>Base URL configurée:</strong> <code>"${getBaseUrl()}"</code></p>
                 <p><strong>URL complète:</strong> <code>${window.location.href}</code></p>
                 ${isNetlifyTarget ? '<p class="success">✅ Configuration Netlify détectée !</p>' : '<p class="info">ℹ️ Environnement local détecté</p>'}
             `;
@@ -117,7 +116,7 @@
             
             testCases.forEach(test => {
                 try {
-                    const url = URLUtils.buildUrl(test.path);
+                    const url = buildUrl(test.path);
                     results += `<li><strong>${test.name}:</strong> <code>${url}</code></li>`;
                 } catch (error) {
                     results += `<li><strong>${test.name}:</strong> <span class="error">Erreur - ${error.message}</span></li>`;
@@ -130,13 +129,13 @@
 
         // Test de navigation
         window.testNavigate = function(path) {
-            const url = URLUtils.buildUrl(path);
+            const url = buildUrl(path);
             alert(`Navigation vers: ${url}\n\n(En production, cela naviguerait vers cette URL)`);
             console.log('Navigation test:', url);
         };
 
-        // Exposer URLUtils globalement
-        window.URLUtils = URLUtils;
+        // Exposer les fonctions globalement
+        window.buildUrl = buildUrl;
 
         // Initialiser la page
         displayEnvInfo();

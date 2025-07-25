@@ -1,6 +1,6 @@
 // Gestionnaire de session et permissions pour l'application
 import supabase from "../config.js";
-import URLUtils from "./URLUtils.js";
+import { navigate } from "./URLHelpers.js";
 
 // Fonction pour parser le JWT token
 function parseJwt(token) {
@@ -137,13 +137,13 @@ export class SessionManager {
   static logout() {
     localStorage.removeItem("sb_token");
     sessionStorage.clear();
-    URLUtils.navigate("login");
+    navigate("login");
   }
 
   // Rediriger vers la page de connexion si non authentifié
   static requireAuth(redirectUrl = null) {
     if (!this.isAuthenticated()) {
-      URLUtils.navigate(redirectUrl || "login");
+      navigate(redirectUrl || "login");
       return false;
     }
     return true;
