@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Configuration Netlify - Meetup Connect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #007bff; }
+        .highlight { background-color: #fff3cd; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        button {
+            background-color: #5A3FF3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #4a2fd8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Test de Configuration Netlify</h1>
+    <div class="highlight">
+        <strong>URL Netlify cible:</strong> ephemeral-pastelito-2eff2a.netlify.app
+    </div>
+    
+    <div class="test-section">
+        <h2>Informations d'Environnement</h2>
+        <div id="env-info">Chargement...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test de Configuration des URLs</h2>
+        <div id="url-tests">Chargement...</div>
+        <button onclick="runURLTests()">Tester les URLs</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test de Navigation</h2>
+        <div id="nav-tests">
+            <p>Utilisez ces boutons pour tester la navigation :</p>
+            <button onclick="testNavigate('login')">→ Login</button>
+            <button onclick="testNavigate('register')">→ Register</button>
+            <button onclick="testNavigate('profile')">→ Profile</button>
+            <button onclick="testNavigate('')">→ Accueil</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Instructions de Déploiement</h2>
+        <ol>
+            <li><strong>Connectez GitHub à Netlify :</strong><br>
+                Repository: <code>https://github.com/RudyVieira/Meetup_Connect</code><br>
+                Branch: <code>fix/delete_unnecessary_files</code>
+            </li>
+            <li><strong>Configuration Build :</strong><br>
+                - Build command: <em>(laisser vide)</em><br>
+                - Publish directory: <code>web_api</code>
+            </li>
+            <li><strong>Déployer !</strong> Votre site sera disponible sur :<br>
+                <code>ephemeral-pastelito-2eff2a.netlify.app</code>
+            </li>
+        </ol>
+    </div>
+
+    <script type="module">
+        import { ENV_CONFIG } from './config/environment.js';
+        import URLUtils from './utils/URLUtils.js';
+        import { APP_CONFIG } from './constants/index.js';
+
+        // Afficher les informations d'environnement
+        function displayEnvInfo() {
+            const envInfo = document.getElementById('env-info');
+            const isNetlifyTarget = window.location.hostname.includes('pastelito');
+            
+            envInfo.innerHTML = `
+                <p><strong>Hostname actuel:</strong> <code>${window.location.hostname}</code></p>
+                <p><strong>Est Netlify:</strong> <span class="${ENV_CONFIG.isNetlify() ? 'success' : 'error'}">${ENV_CONFIG.isNetlify()}</span></p>
+                <p><strong>Est Local:</strong> <span class="${ENV_CONFIG.isLocal() ? 'success' : 'error'}">${ENV_CONFIG.isLocal()}</span></p>
+                <p><strong>Base URL configurée:</strong> <code>"${APP_CONFIG.baseUrl}"</code></p>
+                <p><strong>URL complète:</strong> <code>${window.location.href}</code></p>
+                ${isNetlifyTarget ? '<p class="success">✅ Configuration Netlify détectée !</p>' : '<p class="info">ℹ️ Environnement local détecté</p>'}
+            `;
+        }
+
+        // Test des URLs
+        window.runURLTests = function() {
+            const urlTests = document.getElementById('url-tests');
+            const testCases = [
+                { name: 'Accueil', path: '' },
+                { name: 'Login', path: 'login' },
+                { name: 'Register', path: 'register' },
+                { name: 'Profile', path: 'profile' },
+                { name: 'Communautés', path: 'communautes' }
+            ];
+
+            let results = '<h3>URLs générées :</h3><ul>';
+            
+            testCases.forEach(test => {
+                try {
+                    const url = URLUtils.buildUrl(test.path);
+                    results += `<li><strong>${test.name}:</strong> <code>${url}</code></li>`;
+                } catch (error) {
+                    results += `<li><strong>${test.name}:</strong> <span class="error">Erreur - ${error.message}</span></li>`;
+                }
+            });
+
+            results += '</ul>';
+            urlTests.innerHTML = results;
+        };
+
+        // Test de navigation
+        window.testNavigate = function(path) {
+            const url = URLUtils.buildUrl(path);
+            alert(`Navigation vers: ${url}\n\n(En production, cela naviguerait vers cette URL)`);
+            console.log('Navigation test:', url);
+        };
+
+        // Exposer URLUtils globalement
+        window.URLUtils = URLUtils;
+
+        // Initialiser la page
+        displayEnvInfo();
+        runURLTests();
+    </script>
+</body>
+</html>
