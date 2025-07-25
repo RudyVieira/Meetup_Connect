@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test HomePage - Meetup Connect</title>
+    <link rel="stylesheet" href="./styles/tailwind-minimal.css">
+    <style>
+        body { margin: 0; padding: 0; }
+        #debug { position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; z-index: 9999; }
+    </style>
+</head>
+<body>
+    <div id="debug">
+        URL: <span id="url-debug"></span><br>
+        baseUrl: <span id="baseurl-debug"></span><br>
+        Route: <span id="route-debug"></span>
+    </div>
+    <div id="root">Chargement...</div>
+    
+    <script type="module">
+        // Debug info
+        document.getElementById('url-debug').textContent = window.location.href;
+        
+        import { getBaseUrl } from './config/base.js';
+        const baseUrl = getBaseUrl();
+        document.getElementById('baseurl-debug').textContent = baseUrl;
+        
+        const path = window.location.pathname.slice(baseUrl.length) || '/';
+        document.getElementById('route-debug').textContent = path;
+        
+        // Test direct de HomePage
+        import HomePage from './views/HomePage.js';
+        import createElement from './lib/createElement.js';
+        
+        try {
+            console.log('Testing HomePage...');
+            const homePageComponent = HomePage();
+            console.log('HomePage component created:', homePageComponent);
+            
+            const htmlElement = createElement(homePageComponent);
+            console.log('HomePage HTML created:', htmlElement);
+            
+            document.getElementById('root').innerHTML = '';
+            document.getElementById('root').appendChild(htmlElement);
+            
+            console.log('HomePage rendered successfully!');
+        } catch (error) {
+            console.error('Error rendering HomePage:', error);
+            document.getElementById('root').innerHTML = `
+                <div style="padding: 20px; color: red;">
+                    <h1>Erreur de rendu HomePage</h1>
+                    <p>${error.message}</p>
+                    <pre>${error.stack}</pre>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

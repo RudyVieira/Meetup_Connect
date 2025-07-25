@@ -1,0 +1,12 @@
+# Redirection principale : racine vers web_api
+/    /web_api/   301
+
+# Redirection des chemins vers web_api
+/home    /web_api/   301
+/communautes    /web_api/   301
+/evenements    /web_api/   301
+/login    /web_api/   301
+/register    /web_api/   301
+
+# Fallback pour tous les autres chemins
+/*    /web_api/   301
