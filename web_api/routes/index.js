@@ -6,11 +6,17 @@ import LoginPage from "../views/LoginPage.js";
 import ProfilePage from "../views/ProfilePage.js";
 import Communautes from "../views/Communautes.js";
 import CommunautePage from "../views/CommunautePage.js";
-
+import HomePage from "../views/HomePage.js";
 import AdminPage from "../views/AdminPage.js";
 
 
 export default {
+  "/": {
+    tag: HomePage,
+  },
+  "/home": {
+    tag: HomePage,
+  },
   "/communautes": {
     tag: Communautes,
   },
